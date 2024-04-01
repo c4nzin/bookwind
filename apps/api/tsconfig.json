@@ -1,0 +1,14 @@
+{
+  "extends": "@project-alpha/tsconfig/nest.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@common/*": ["src/common/*"],
+      "@modules/*": ["src/modules/*"],
+      "@features/*": ["src/features/*"]
+    },
+    "outDir": "./dist",
+    "baseUrl": "./"
+  }
+}

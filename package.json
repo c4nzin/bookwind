@@ -1,0 +1,15 @@
+{
+  "name": "project-alpha",
+  "scripts": {
+    "build": "lerna run build --stream",
+    "start": "lerna run start --stream",
+    "start:dev": "lerna run start:dev --stream",
+    "lint": "lerna run lint --stream",
+    "format": "lerna run lint --stream"
+  },
+  "devDependencies": {
+    "@project-alpha/prettier-config": "workspace:^",
+    "@project-alpha/tsconfig": "workspace:^",
+    "lerna": "^8.1.2"
+  }
+}

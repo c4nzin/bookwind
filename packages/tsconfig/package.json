@@ -1,0 +1,8 @@
+{
+    "name": "@project-alpha/tsconfig",
+    "version": "0.0.1",
+    "files": [
+      "base.json",
+      "nest.json"
+    ]
+  }
