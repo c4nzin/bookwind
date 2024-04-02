@@ -6,6 +6,8 @@ const config = {
   PORT: port({ default: 3000 }),
   GLOBAL_PREFIX: str({ default: 'api' }),
   LOGTAIL_SOURCE: str({}),
+  EXPRESS_SESSION_SECRET: str(),
+  DEFAULT_PROFILE_PHOTO: str(),
 };
 
 export const validators = makeValidators(config);
