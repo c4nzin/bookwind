@@ -1,10 +1,13 @@
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
+  IsPhoneNumber,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { GENDER } from '../user.schema';
 
 export class RegisterUserDto {
   @IsString()
@@ -15,9 +18,19 @@ export class RegisterUserDto {
 
   @IsString()
   @IsNotEmpty()
-  public password: string;
+  public fullname: string;
 
   @IsEmail()
   @IsNotEmpty()
-  public email: string;
+  public mail: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public password: string;
+
+  @IsPhoneNumber()
+  public phoneNumber: number;
+
+  @IsEnum(GENDER)
+  public gender: number;
 }

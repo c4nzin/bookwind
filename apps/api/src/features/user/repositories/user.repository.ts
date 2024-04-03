@@ -1,13 +1,13 @@
 import { BaseRepository } from '@common/repositories';
-import { User, UserSchema } from '../user.schema';
+import { User } from '../user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
-export class UserRepository extends BaseRepository<UserSchema> {
+export class UserRepository extends BaseRepository<User> {
   constructor(
-    @InjectModel(User.name) private readonly userRepository: Model<UserSchema>,
+    @InjectModel(User.name) private readonly userRepository: Model<User>,
   ) {
     super(userRepository);
   }

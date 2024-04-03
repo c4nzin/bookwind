@@ -5,11 +5,8 @@ import { LoggerModule } from './logger/logger.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
 import { DatabaseModule } from './database/database.module';
-import { AuthModule } from '@features/auth/auth.module';
-
 @Module({
   imports: [
-    AuthModule,
     EnvalidModule.forRoot({ validators, isGlobal: true, useDotenv: true }),
     LoggerModule,
     DatabaseModule,
