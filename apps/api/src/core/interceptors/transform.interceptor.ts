@@ -7,8 +7,8 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Response as expressResponse } from 'express';
-import { Message } from '@common/decorators/message.decorator';
 import { Reflector } from '@nestjs/core';
+import { Message } from '../decorators/message.decorator';
 
 interface Response<T> {
   data?: T;

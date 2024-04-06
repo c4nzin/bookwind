@@ -7,7 +7,7 @@ import { Logtail } from '@logtail/node';
 import * as winston from 'winston';
 import { createWinstonFormatter } from './winston-formatter';
 import { LogtailTransport } from '@logtail/winston';
-import { ENV, Config } from '@common/config';
+import { ENV, Config } from '@modules/config';
 @Injectable()
 export class LoggerService implements WinstonModuleOptionsFactory {
   constructor(@Inject(ENV) private configuration: Config) {}

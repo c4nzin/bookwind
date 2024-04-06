@@ -1,4 +1,4 @@
-import { Config, ENV } from '@common/config';
+import { Config, ENV } from '@modules/config';
 import { Inject } from '@nestjs/common';
 import {
   MongooseModuleOptions,

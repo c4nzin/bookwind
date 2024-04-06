@@ -1,4 +1,4 @@
-import { ENV, Config } from '@common/config';
+import { ENV, Config } from '@modules/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import expressSanitize from 'express-mongo-sanitize';
 import compression from 'compression';

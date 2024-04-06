@@ -1,5 +1,3 @@
-import { UserRepository } from '@features/user/repositories';
-import { UserSchema } from '@features/user/user.schema';
 import {
   BadRequestException,
   HttpStatus,
@@ -7,6 +5,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
+import { UserSchema } from '../user/entities/user.schema';
+import { UserRepository } from '../user/repositories';
 
 @Injectable()
 export class AuthService {

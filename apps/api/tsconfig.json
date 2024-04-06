@@ -5,7 +5,7 @@
     "paths": {
       "@config/*": ["src/config/*"],
       "@common/*": ["src/common/*"],
-      "@modules/*": ["src/modules/*"],
+      "@modules/*": ["src/infrastructure/*"],
       "@features/*": ["src/features/*"]
     },
     "outDir": "./dist",

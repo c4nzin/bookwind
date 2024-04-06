@@ -1,4 +1,4 @@
-import { validators } from '@common/config';
+import { validators } from '@modules/config';
 import { Module } from '@nestjs/common';
 import { EnvalidModule } from 'nestjs-envalid';
 import { LoggerModule } from './logger/logger.module';

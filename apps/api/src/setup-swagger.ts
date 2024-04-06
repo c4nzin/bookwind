@@ -1,4 +1,4 @@
-import { Config, ENV } from '@common/config';
+import { Config, ENV } from '@modules/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {
   DocumentBuilder,
