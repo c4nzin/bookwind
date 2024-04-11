@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 export type UserSchema = HydratedDocument<User>;
@@ -62,7 +62,7 @@ export class User {
       /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
       'Please enter your phone number',
     ],
-    required: false, // its false because i am not planning to implement sms validation feature in mvp version
+    required: false, // its false because i am not planning to implement sms validation feature in 1.0 version
   })
   public phoneNumber: number;
 
@@ -86,8 +86,30 @@ export class User {
     default: Roles.user,
   })
   public role: string;
+
+  @Prop({
+    ref: 'Post',
+    type: [Types.ObjectId],
+    default: [], //not tested yet !
+  })
+  public posts: Types.ObjectId[];
+
+  @Prop({
+    ref: 'Follow',
+    default: [],
+    type: [Types.ObjectId],
+  })
+  public follower: Types.ObjectId[];
+
+  @Prop({
+    ref: 'Follow',
+    default: [],
+    type: [Types.ObjectId],
+  })
+  public following: Types.ObjectId[];
 }
 
+//change as UserSchema
 export const UserModel = SchemaFactory.createForClass(User);
 
 UserModel.pre('save', async function (next) {

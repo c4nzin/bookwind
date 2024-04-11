@@ -22,4 +22,5 @@ export class Post {
   public author: Types.ObjectId; // mb use string?
 }
 
-export const PostModel = SchemaFactory.createForClass(Post);
+//Change as PostSchema
+export const PostModel = SchemaFactory.createForClass<Post>(Post);
