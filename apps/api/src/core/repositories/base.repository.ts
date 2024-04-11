@@ -42,7 +42,7 @@ export class BaseRepository<T> {
     return this.model.findOne(filter);
   }
 
-  public findOneAndDelete(filter: FilterQuery<T>): FindResult<T> {
+  public findOneAndDelete(filter: FilterQuery<T>): FilterQuery<T> {
     return this.model.findOneAndDelete(filter);
   }
 

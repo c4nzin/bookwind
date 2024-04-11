@@ -4,11 +4,15 @@ import * as bcrypt from 'bcrypt';
 
 export type UserSchema = HydratedDocument<User>;
 
-export enum GENDER {
-  NOT_KNOWN,
-  MALE,
-  FEMALE,
-  NON_BINARY,
+enum Roles {
+  user = 'User',
+  admin = 'Admin',
+}
+
+enum Gender {
+  female = 'Female',
+  male = 'Male',
+  other = 'Other',
 }
 
 @Schema({ timestamps: true })
@@ -35,6 +39,12 @@ export class User {
   public mail: string;
 
   @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public isEmailVerified: string;
+
+  @Prop({
     required: true,
   })
   public password: string;
@@ -42,8 +52,8 @@ export class User {
   @Prop({
     required: true,
     type: Number,
-    enum: GENDER,
-    default: GENDER.NOT_KNOWN,
+    enum: Gender,
+    default: Gender.other,
   })
   public gender: string;
 
@@ -69,6 +79,13 @@ export class User {
     maxlength: 150,
   })
   public biography: string;
+
+  @Prop({
+    type: String,
+    enum: Roles,
+    default: Roles.user,
+  })
+  public role: string;
 }
 
 export const UserModel = SchemaFactory.createForClass(User);

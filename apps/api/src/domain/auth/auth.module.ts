@@ -4,9 +4,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { Session } from './sessions';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [PassportModule.register({ session: true })],
+  imports: [PassportModule.register({ session: true }), UserModule],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, Session],
 })
