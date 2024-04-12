@@ -23,4 +23,4 @@ export class Post {
 }
 
 //Change as PostSchema
-export const PostModel = SchemaFactory.createForClass<Post>(Post);
+export const PostSchema = SchemaFactory.createForClass<Post>(Post);

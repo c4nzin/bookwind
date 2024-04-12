@@ -8,6 +8,7 @@ import {
   CreateResult,
   DeleteResult,
   FindAllResult,
+  FindOneResult,
   FindResult,
   UpdateResult,
 } from './types/queries.types';
@@ -38,11 +39,12 @@ export class BaseRepository<T> {
     return this.model.findByIdAndUpdate(id, update, { new: true });
   }
 
-  public findOne(filter: FilterQuery<T>): FindResult<T> {
-    return this.model.findOne(filter);
+  public async findOne(filter: FilterQuery<T>): Promise<FindOneResult<T>> {
+    const result = await this.model.findOne(filter);
+    return result ? result : null;
   }
 
-  public findOneAndDelete(filter: FilterQuery<T>): FilterQuery<T> {
+  public findOneAndDelete(filter: FilterQuery<T>): FilterQuery<any> {
     return this.model.findOneAndDelete(filter);
   }
 

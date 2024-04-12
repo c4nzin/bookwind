@@ -22,4 +22,4 @@ export class Follow {
 }
 
 //Change as FollowSchema
-export const FollowModel = SchemaFactory.createForClass<Follow>(Follow);
+export const FollowSchema = SchemaFactory.createForClass<Follow>(Follow);

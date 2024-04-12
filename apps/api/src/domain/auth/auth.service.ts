@@ -5,46 +5,65 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
-import { UserSchema } from '../user/entities/user.schema';
+import { UserDocument } from '../user/entities/user.schema';
 import { UserRepository } from '../user/repositories';
+import { RegisterUserDto, LoginDto } from './dto';
+import { LoginReturn, LogoutResponse } from './types/base.types';
+import { User } from 'src/core/decorators/user.decorator';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  public async register(registerUserDto: RegisterUserDto) {
+    const user = await this.userRepository.findOne({
+      username: registerUserDto.username,
+    });
+
+    if (user) throw new BadRequestException('user already registered');
+
+    return this.userRepository.create(registerUserDto);
+  }
+
   public async validate(
-    password: string,
     username: string,
-  ): Promise<UserSchema> {
+    password: string,
+  ): Promise<UserDocument | null> {
+    console.log(username);
     const user = await this.userRepository.findOne({ username });
 
-    const isPasswordMatching = await this.userRepository.comparePasswords(
+    const isCorrectPasswords = await this.userRepository.comparePasswords(
       password,
       user.password,
     );
 
-    if (!isPasswordMatching)
-      throw new BadRequestException('Invalid Credentials');
+    if (!isCorrectPasswords) return null;
+    if (!user) return null;
 
     return user;
   }
 
-  public async login(): Promise<{
-    message: string;
-    statusCode: number;
-  }> {
+  //hard coded - need refactor
+  public async login(loginDto: LoginDto): Promise<LoginReturn> {
     return {
-      message: 'Sucessfully joined to our app!',
+      message: {
+        title: 'Succesfully logged in',
+        body: loginDto,
+      },
       statusCode: HttpStatus.OK,
     };
   }
 
-  public async logout(@Req() req: ExpressRequest): Promise<void> {
-    req.session.destroy(() => {
-      return {
-        message: 'Sucesfully logged out in our app',
-        statusCode: HttpStatus.OK,
-      };
+  public async logout(@Req() req: ExpressRequest): Promise<LogoutResponse> {
+    const { statusCode } = req.body;
+    return new Promise<LogoutResponse>((resolve, reject) => {
+      req.logOut((err) => {
+        if (err) reject(err);
+        resolve({
+          message: 'logged out',
+          statusCode,
+        });
+      });
     });
   }
 }

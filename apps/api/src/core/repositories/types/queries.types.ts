@@ -29,3 +29,5 @@ export type DeleteResult<T> = Query<
   object,
   T
 >;
+
+export type FindOneResult<T> = HydratedDocument<T> | undefined;

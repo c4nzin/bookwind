@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
-export type UserSchema = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<User>;
 
 enum Roles {
   user = 'User',
@@ -50,8 +50,8 @@ export class User {
   public password: string;
 
   @Prop({
-    required: true,
-    type: Number,
+    required: false,
+    type: String,
     enum: Gender,
     default: Gender.other,
   })
@@ -68,7 +68,7 @@ export class User {
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
     default: process.env.DEFAULT_PROFILE_PHOTO,
     match: [/^(https?):\/\/[^\s$.?#].[^\s]*$/gm, 'url is not valid'],
   })
@@ -87,10 +87,11 @@ export class User {
   })
   public role: string;
 
+  //not tested yet
   @Prop({
     ref: 'Post',
     type: [Types.ObjectId],
-    default: [], //not tested yet !
+    default: [],
   })
   public posts: Types.ObjectId[];
 
@@ -110,9 +111,11 @@ export class User {
 }
 
 //change as UserSchema
-export const UserModel = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
 
-UserModel.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
+  //if (!this.isModified('password')) {...} ??
+
   if (!this.isModified(this.password)) {
     const hashedPassword = await bcrypt.hash(this.password, 10);
 
