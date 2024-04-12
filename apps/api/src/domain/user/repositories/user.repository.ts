@@ -24,19 +24,6 @@ export class UserRepository extends BaseRepository<User> {
     return isPasswordMatch;
   }
 
-  // public async comparePasswords(
-  //   username: string,
-  //   password: string,
-  // ): Promise<boolean> {
-  //   const user = await this.userRepository
-  //     .findOne({ username })
-  //     .select('+password');
-
-  //   if (!user) return false;
-
-  //   return bcrypt.compareSync(password, user.password);
-  // }
-
   public async findUserOrThrow(username: string): Promise<UserDocument> {
     const user = await this.userRepository.findOne({ username });
 
