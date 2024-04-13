@@ -16,6 +16,7 @@ export class MailFactory implements MailerOptionsFactory {
           user: this.config.GOOGLE_EMAIL,
           pass: this.config.GOOGLE_PASSWORD,
         },
+        service: 'gmail',
         tls: { rejectUnauthorized: false }, //to avoid any potential authorization err
       },
       defaults: {
