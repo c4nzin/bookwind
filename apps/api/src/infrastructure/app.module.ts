@@ -7,6 +7,7 @@ import { LoggingInterceptor } from '@algoan/nestjs-logging-interceptor';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from 'src/domain/auth/auth.module';
 import { UserModule } from 'src/domain/user/user.module';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     EnvalidModule.forRoot({ validators, isGlobal: true, useDotenv: true }),
@@ -14,6 +15,7 @@ import { UserModule } from 'src/domain/user/user.module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    MailModule,
   ],
   providers: [
     {

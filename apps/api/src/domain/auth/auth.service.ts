@@ -9,7 +9,6 @@ import { UserDocument } from '../user/entities/user.schema';
 import { UserRepository } from '../user/repositories';
 import { RegisterUserDto, LoginDto } from './dto';
 import { LoginReturn, LogoutResponse } from './types/base.types';
-import { User } from 'src/core/decorators/user.decorator';
 
 @Injectable()
 export class AuthService {
