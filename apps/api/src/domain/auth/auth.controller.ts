@@ -5,17 +5,24 @@ import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDocument } from '../user/entities/user.schema';
 import { RegisterUserDto, LoginDto } from './dto';
-import { User } from 'src/core/decorators/user.decorator';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Post('register')
   public async register(
     @Body() registerUserDto: RegisterUserDto,
   ): Promise<UserDocument> {
+    this.eventEmitter.emit('user-registered', {
+      username: registerUserDto.username,
+    });
+
     return this.authService.register(registerUserDto);
   }
 

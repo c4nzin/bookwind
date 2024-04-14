@@ -4,8 +4,9 @@ import { Config, ENV } from '@modules/config';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Injectable()
-export class MailFactory implements MailerOptionsFactory {
+export class MailConfigService implements MailerOptionsFactory {
   constructor(@Inject(ENV) private readonly config: Config) {}
+
   public async createMailerOptions(): Promise<MailerOptions> {
     return {
       transport: {

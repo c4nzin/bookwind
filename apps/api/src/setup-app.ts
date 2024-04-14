@@ -10,9 +10,14 @@ import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
 import session from 'express-session';
 import passport from 'passport';
 import connectMongo from 'connect-mongo';
+import { join } from 'path';
 
 export async function setupApp(app: NestExpressApplication): Promise<void> {
   const config = app.get<Config>(ENV);
+
+  app.setBaseViewsDir(join('src/infrastructure/mail/templates'));
+
+  app.setViewEngine('ejs');
 
   app.use(
     session({
