@@ -110,12 +110,9 @@ export class User {
   public following: Types.ObjectId[];
 }
 
-//change as UserSchema
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre('save', async function (next) {
-  //if (!this.isModified('password')) {...} ??
-
   if (!this.isModified(this.password)) {
     const hashedPassword = await bcrypt.hash(this.password, 10);
 

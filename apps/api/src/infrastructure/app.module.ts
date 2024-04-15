@@ -9,6 +9,7 @@ import { AuthModule } from 'src/domain/auth/auth.module';
 import { UserModule } from 'src/domain/user/user.module';
 import { MailModule } from './mail/mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { JwtModule } from './jwt/jwt.module';
 @Module({
   imports: [
     EnvalidModule.forRoot({ validators, isGlobal: true, useDotenv: true }),
@@ -18,6 +19,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     UserModule,
     MailModule,
     EventEmitterModule.forRoot(),
+    JwtModule,
   ],
   providers: [
     {

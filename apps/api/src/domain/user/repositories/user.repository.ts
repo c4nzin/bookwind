@@ -24,6 +24,8 @@ export class UserRepository extends BaseRepository<User> {
     return isPasswordMatch;
   }
 
+  public async verifyEmail() {}
+
   public async findUserOrThrow(username: string): Promise<UserDocument> {
     const user = await this.userRepository.findOne({ username });
 

@@ -6,6 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UserDocument } from '../user/entities/user.schema';
 import { RegisterUserDto, LoginDto } from './dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Message } from 'src/core/decorators/message.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -16,6 +17,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @Message('Sucessfully registered!')
   public async register(
     @Body() registerUserDto: RegisterUserDto,
   ): Promise<UserDocument> {
@@ -28,11 +30,13 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @Message('Sucessfully logged in!')
   public async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
   @Get('logout')
+  @Message('Sucessfully logged out!')
   public async logout(@Req() request: Request) {
     return this.authService.logout(request);
   }

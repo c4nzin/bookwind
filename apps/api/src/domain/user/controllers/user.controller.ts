@@ -4,12 +4,14 @@ import { UserRepository } from '../repositories';
 import { User } from 'src/core/decorators/user.decorator';
 import { UserModule } from '../user.module';
 import { User as test, UserSchema } from '../entities/user.schema';
+import { Message } from 'src/core/decorators/message.decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
 
   @Get('me')
+  @Message('Sucessfully fetched the logged user')
   public loggedUser(@User() user: test) {
     return user;
   }
