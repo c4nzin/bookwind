@@ -39,4 +39,20 @@ export class UserRepository extends BaseRepository<User> {
   public async findAll() {
     return await this.find({});
   }
+
+  public async findByUsername(
+    username: string,
+  ): Promise<UserDocument[] | null> {
+    //Remove _id field i dont want to leak it
+    const queryFields = [
+      'username',
+      'fullname',
+      'posts',
+      'follower',
+      'following',
+      'createdAt',
+    ];
+
+    return this.find({ username }).select(queryFields);
+  }
 }

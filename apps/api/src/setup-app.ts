@@ -15,7 +15,7 @@ import { join } from 'path';
 export async function setupApp(app: NestExpressApplication): Promise<void> {
   const config = app.get<Config>(ENV);
 
-  app.setBaseViewsDir(join('src/infrastructure/mail/templates'));
+  app.setBaseViewsDir(join(__dirname + '/infrastructure/mail/templates'));
 
   app.setViewEngine('ejs');
 

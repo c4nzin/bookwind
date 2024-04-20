@@ -29,7 +29,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: email,
       subject,
-      template: '/templates/welcome', //not implemented
+      template: '/templates/welcome', //not implemented yet
       context: {
         fullname,
       },
@@ -64,7 +64,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: email,
       subject: 'Please verify your email',
-      template: '/templates/verifyMail', // make with ejs file instead of using plain html
+      template: '/templates/verifyMail', // make with ejs file instead using plain html
       html: `<div> 
         <a href="${verificationEmailUrl}">Click here to verify</a>
       </div>`,
