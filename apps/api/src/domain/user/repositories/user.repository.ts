@@ -26,8 +26,8 @@ export class UserRepository extends BaseRepository<User> {
 
   public async verifyEmail() {}
 
-  public async findUserOrThrow(username: string): Promise<UserDocument> {
-    const user = await this.userRepository.findOne({ username });
+  public async findUserOrThrow(_id: string): Promise<UserDocument> {
+    const user = await this.userRepository.findOne({ _id });
 
     if (!user) {
       throw new BadRequestException('User not found');
@@ -87,6 +87,37 @@ export class UserRepository extends BaseRepository<User> {
     );
   }
 
+  //TODO : make a follow schema and service also an repository
+
+  public async unfollow(
+    loggedUser: UserDocument,
+    targetUserId: string,
+  ): Promise<void> {
+    if (loggedUser.id === targetUserId) {
+      throw new BadRequestException('You can not unfollow yourself');
+    }
+
+    const isFollowing = await this.controlIfFollowingOrNot(
+      loggedUser.id,
+      targetUserId,
+    );
+
+    if (!isFollowing)
+      throw new BadRequestException('No user found to unfollow');
+
+    await this.findUserOrThrow(targetUserId);
+
+    await this.userRepository.updateOne(
+      { _id: loggedUser.id },
+      { $pull: { following: targetUserId } },
+    );
+
+    await this.userRepository.updateOne(
+      { _id: targetUserId },
+      { $pull: { follower: loggedUser.id } },
+    );
+  }
+
   public async controlIfFollowingOrNot(
     loggedUserId: string,
     targetUserId: string,
@@ -98,4 +129,6 @@ export class UserRepository extends BaseRepository<User> {
 
     return !!isAlreadyFollowing;
   }
+
+  //TODO : add unfollow mechanicsm
 }

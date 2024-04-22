@@ -30,4 +30,13 @@ export class UserController {
   ): Promise<void> {
     return this.userRepository.follow(user.id, id);
   }
+
+  @Post('me/unfollow/:id')
+  @Message('You successfuly unfollowed the user!')
+  public async unfollowUser(
+    @User() user: UserDocument,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.userRepository.unfollow(user, id);
+  }
 }
