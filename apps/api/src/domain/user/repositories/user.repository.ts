@@ -55,4 +55,47 @@ export class UserRepository extends BaseRepository<User> {
 
     return this.find({ username }).select(queryFields);
   }
+
+  //Follow user
+  //TODO : move "follow" method to user service
+  //TODO : this isn't right to store in user repository imo
+  public async follow(loggedUserId: string, targetId: string): Promise<void> {
+    if (loggedUserId === targetId) {
+      throw new BadRequestException('You can not follow yourself');
+    }
+
+    //is already following or not
+    const isAlreadyFollowing = await this.controlIfFollowingOrNot(
+      loggedUserId,
+      targetId,
+    );
+
+    await this.findUserOrThrow(targetId);
+
+    if (isAlreadyFollowing) {
+      throw new BadRequestException('You already following current user');
+    }
+
+    await this.userRepository.updateOne(
+      { _id: loggedUserId },
+      { $push: { following: targetId } },
+    );
+
+    await this.userRepository.updateOne(
+      { _id: targetId },
+      { $push: { follower: loggedUserId } },
+    );
+  }
+
+  public async controlIfFollowingOrNot(
+    loggedUserId: string,
+    targetUserId: string,
+  ): Promise<boolean> {
+    const isAlreadyFollowing = await this.findOne({
+      _id: loggedUserId,
+      following: targetUserId,
+    });
+
+    return !!isAlreadyFollowing;
+  }
 }

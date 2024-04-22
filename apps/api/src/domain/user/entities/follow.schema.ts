@@ -11,7 +11,6 @@ export class Follow {
     ref: 'User',
     type: Types.ObjectId,
   })
-  //Being followed
   public follower: Types.ObjectId;
 
   @Prop({
