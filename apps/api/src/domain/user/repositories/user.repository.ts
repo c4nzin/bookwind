@@ -46,7 +46,7 @@ export class UserRepository extends BaseRepository<User> {
   public async findByUsername(
     username: string,
   ): Promise<UserDocument[] | null> {
-    //Remove _id field i dont want to leak it
+    //Remove _id field i don't want to leak it
     const queryFields = [
       'username',
       'fullname',
@@ -79,14 +79,25 @@ export class UserRepository extends BaseRepository<User> {
       throw new BadRequestException('You already following current user');
     }
 
-    await this.userRepository.updateOne(
-      { _id: loggedUserId },
-      { $push: { following: targetId } },
-    );
+    //old solution, will be removed soon
+    // await this.userRepository.updateOne(
+    //   { _id: loggedUserId },
+    //   { $push: { following: targetId } },
+    // );
 
-    await this.userRepository.updateOne(
-      { _id: targetId },
-      { $push: { follower: loggedUserId } },
+    // await this.userRepository.updateOne(
+    //   { _id: targetId },
+    //   { $push: { follower: loggedUserId } },
+    // );
+
+    //a new approach to use
+    await this.userRepository.updateMany(
+      {
+        $or: [{ _id: loggedUserId }, { _id: targetId }],
+      },
+      {
+        $push: { following: targetId, follower: loggedUserId },
+      },
     );
   }
 
@@ -109,14 +120,25 @@ export class UserRepository extends BaseRepository<User> {
 
     await this.findUserOrThrow(targetUserId);
 
-    await this.userRepository.updateOne(
-      { _id: loggedUser.id },
-      { $pull: { following: targetUserId } },
-    );
+    //old solution, will be removed soon
+    // await this.userRepository.updateOne(
+    //   { _id: loggedUser.id },
+    //   { $pull: { following: targetUserId } },
+    // );
 
-    await this.userRepository.updateOne(
-      { _id: targetUserId },
-      { $pull: { follower: loggedUser.id } },
+    // await this.userRepository.updateOne(
+    //   { _id: targetUserId },
+    //   { $pull: { follower: loggedUser.id } },
+    // );
+
+    //a new approach to fix
+    await this.userRepository.updateMany(
+      {
+        $or: [{ _id: loggedUser.id }, { _id: targetUserId }],
+      },
+      {
+        $pull: { following: targetUserId, follower: loggedUser.id },
+      },
     );
   }
 
