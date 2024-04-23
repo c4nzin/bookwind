@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { UserRepository } from '../repositories';
 import { User } from 'src/core/decorators/user.decorator';
 import { UserDocument } from '../entities/user.schema';
 import { Message } from 'src/core/decorators/message.decorator';
+import { Request } from 'express';
 
 @Controller('users')
 export class UserController {
@@ -42,13 +43,13 @@ export class UserController {
 
   @Get(':id/followers')
   @Message('Sucessfully fetched the followers')
-  public async getFollowers(@Param('id') id: string) {
-    return this.userRepository.getFollowers(id);
+  public async getFollowers(@Param('id') id: string, @Req() request: Request) {
+    return this.userRepository.getFollowingsOrFollowers(id, request);
   }
 
   @Get(':id/followings')
   @Message('Sucessfully fetched the followings of user')
-  public async getFollowings(@Param('id') id: string) {
-    return this.userRepository.getFollowings(id);
+  public async getFollowings(@Param('id') id: string, @Req() request: Request) {
+    return this.userRepository.getFollowingsOrFollowers(id, request);
   }
 }

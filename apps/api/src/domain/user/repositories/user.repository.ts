@@ -4,6 +4,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
+import { Request } from 'express';
+import { urlWrapper } from './utils';
+
+export enum PATHS {
+  FOLLOWINGS = 'followings',
+  FOLLOWERS = 'followers',
+}
 
 export class UserRepository extends BaseRepository<User> {
   constructor(
@@ -155,40 +162,65 @@ export class UserRepository extends BaseRepository<User> {
   }
 
   //Not done yet
-  public async convertAllFollowersToUsername(id: string) {
-    // const usernames: string[] = new Array();
+  //Those 2 methods are similar and doing almost same job. So try to find a way to merge into one OK OK
+  //a new approach to fix bad code
+  public async getFollowingsOrFollowers(id: string, request: Request) {
+    const url = request.url;
+    const path: string =
+      urlWrapper(url) === PATHS.FOLLOWINGS ? PATHS.FOLLOWINGS : PATHS.FOLLOWERS;
+
     const user = await this.userRepository.findById(id).orFail();
 
-    const followerIds = user.follower.map((followerId: Types.ObjectId) =>
-      this.userRepository.findById(followerId),
+    let userIds: Types.ObjectId[] = [];
+
+    if (path === PATHS.FOLLOWERS) {
+      userIds = user.follower;
+    } else {
+      userIds = user.following;
+    }
+
+    const users = await Promise.all(
+      userIds.map((userId) => this.userRepository.findById(userId)),
     );
 
-    const followerOfUsers = await Promise.all(followerIds);
-
-    const usernames = followerOfUsers.map((follower) => follower.username);
-
-    return usernames;
+    return users.map((user) => user.username);
   }
 
-  public async convertAllFollowingsToUsername(id: string): Promise<string[]> {
-    const user = await this.userRepository.findById(id).orFail();
+  //OLD ONE
+  //  public async convertAllFollowersToUsername(id: string) {
+  //   // const usernames: string[] = new Array();
+  //   const user = await this.userRepository.findById(id).orFail();
 
-    const followingIds = user.following.map((followingIds: Types.ObjectId) =>
-      this.userRepository.findById(followingIds),
-    );
+  //   const followerIds = user.follower.map((followerId: Types.ObjectId) =>
+  //     this.userRepository.findById(followerId),
+  //   );
 
-    const followingsOfUser = await Promise.all(followingIds);
+  //   const followerOfUsers = await Promise.all(followerIds);
 
-    const usernames = followingsOfUser.map((following) => following.username);
+  //   const usernames = followerOfUsers.map((follower) => follower.username);
 
-    return usernames;
+  //   return usernames;
+  // }
+
+  // public async convertAllFollowingsToUsername(id: string): Promise<string[]> {
+  //   const user = await this.userRepository.findById(id).orFail();
+
+  //   const followingIds = user.following.map((followingIds: Types.ObjectId) =>
+  //     this.userRepository.findById(followingIds),
+  //   );
+
+  //   const followingsOfUser = await Promise.all(followingIds);
+
+  //   const usernames = followingsOfUser.map((following) => following.username);
+
+  //   return usernames;
+  // }
+
+  public async getFollowers(id: string, request: Request) {
+    return this.getFollowingsOrFollowers(id, request);
   }
 
-  public async getFollowers(id: string): Promise<string[]> {
-    return this.convertAllFollowersToUsername(id);
-  }
-
-  public async getFollowings(id: string): Promise<string[]> {
-    return this.convertAllFollowingsToUsername(id);
+  public async getFollowings(id: string, request: Request) {
+    return this.getFollowingsOrFollowers(id, request);
   }
 }

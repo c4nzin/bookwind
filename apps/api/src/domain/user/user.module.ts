@@ -5,6 +5,7 @@ import { User, UserSchema } from './entities/user.schema';
 import { Follow, FollowSchema } from './entities/follow.schema';
 import { Post, PostSchema } from './entities/post.schema';
 import { UserController } from './controllers/user.controller';
+import { UserService } from './services/user.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { UserController } from './controllers/user.controller';
     ]),
   ],
   controllers: [UserController],
-  providers: [UserRepository],
+  providers: [UserRepository, UserService],
   exports: [UserRepository],
 })
 export class UserModule {}
