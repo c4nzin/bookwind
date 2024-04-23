@@ -39,4 +39,10 @@ export class UserController {
   ): Promise<void> {
     return this.userRepository.unfollow(user, id);
   }
+
+  @Get(':id/followers')
+  @Message('Sucessfully fetched the followers')
+  public async getFollowers(@Param('id') id: string) {
+    return this.userRepository.getFollowers(id);
+  }
 }

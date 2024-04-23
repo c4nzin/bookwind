@@ -1,7 +1,7 @@
 import { BaseRepository } from 'src/core/repositories';
 import { User, UserDocument } from '../entities/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
@@ -26,6 +26,9 @@ export class UserRepository extends BaseRepository<User> {
 
   public async verifyEmail() {}
 
+  //do not forget to delete that method this is just awful to use in practice
+  //TODO : just use it like : user.findOne().orFail()
+  //This will save me by implementing one more if checking i.e. : line 35-40 is not useful to check
   public async findUserOrThrow(_id: string): Promise<UserDocument> {
     const user = await this.userRepository.findOne({ _id });
 
@@ -88,7 +91,6 @@ export class UserRepository extends BaseRepository<User> {
   }
 
   //TODO : make a follow schema and service also an repository
-
   public async unfollow(
     loggedUser: UserDocument,
     targetUserId: string,
@@ -128,5 +130,25 @@ export class UserRepository extends BaseRepository<User> {
     });
 
     return !!isAlreadyFollowing;
+  }
+
+  //Not done yet
+  public async convertAllFollowersToUsername(id: string) {
+    // const usernames: string[] = new Array();
+    const user = await this.userRepository.findById(id).orFail();
+
+    const followerIds = user.follower.map((followerId: Types.ObjectId) =>
+      this.userRepository.findById(followerId),
+    );
+
+    const followerOfUsers = await Promise.all(followerIds);
+
+    const usernames = followerOfUsers.map((follower) => follower.username);
+
+    return usernames;
+  }
+
+  public async getFollowers(id: string): Promise<any> {
+    return this.convertAllFollowersToUsername(id);
   }
 }
