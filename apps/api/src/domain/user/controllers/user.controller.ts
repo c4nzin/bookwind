@@ -45,4 +45,10 @@ export class UserController {
   public async getFollowers(@Param('id') id: string) {
     return this.userRepository.getFollowers(id);
   }
+
+  @Get(':id/followings')
+  @Message('Sucessfully fetched the followings of user')
+  public async getFollowings(@Param('id') id: string) {
+    return this.userRepository.convertAllFollowingsToUsername(id);
+  }
 }

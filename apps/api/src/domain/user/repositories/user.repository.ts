@@ -148,7 +148,25 @@ export class UserRepository extends BaseRepository<User> {
     return usernames;
   }
 
-  public async getFollowers(id: string): Promise<any> {
+  public async convertAllFollowingsToUsername(id: string): Promise<string[]> {
+    const user = await this.userRepository.findById(id).orFail();
+
+    const followingIds = user.following.map((followingIds: Types.ObjectId) =>
+      this.userRepository.findById(followingIds),
+    );
+
+    const followingsOfUser = await Promise.all(followingIds);
+
+    const usernames = followingsOfUser.map((following) => following.username);
+
+    return usernames;
+  }
+
+  public async getFollowers(id: string): Promise<string[]> {
     return this.convertAllFollowersToUsername(id);
+  }
+
+  public async getFollowings(id: string): Promise<string[]> {
+    return this.convertAllFollowingsToUsername(id);
   }
 }
