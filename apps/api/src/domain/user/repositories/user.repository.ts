@@ -129,6 +129,4 @@ export class UserRepository extends BaseRepository<User> {
 
     return !!isAlreadyFollowing;
   }
-
-  //TODO : add unfollow mechanicsm
 }

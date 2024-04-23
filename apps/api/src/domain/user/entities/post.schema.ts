@@ -1,3 +1,5 @@
+//not using rn
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
@@ -22,5 +24,4 @@ export class Post {
   public author: Types.ObjectId; // mb use string?
 }
 
-//Change as PostSchema
 export const PostSchema = SchemaFactory.createForClass<Post>(Post);

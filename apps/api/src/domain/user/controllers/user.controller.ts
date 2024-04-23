@@ -22,7 +22,7 @@ export class UserController {
     return this.userRepository.findByUsername(username);
   }
 
-  @Post('me/follow/:id')
+  @Post(':id/follow')
   @Message('Sucessfully followed the user')
   public async followUser(
     @Param('id') id: string,
@@ -31,7 +31,7 @@ export class UserController {
     return this.userRepository.follow(user.id, id);
   }
 
-  @Post('me/unfollow/:id')
+  @Post(':id/unfollow')
   @Message('You successfuly unfollowed the user!')
   public async unfollowUser(
     @User() user: UserDocument,

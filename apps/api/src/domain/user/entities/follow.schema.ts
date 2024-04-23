@@ -1,3 +1,5 @@
+//not using rn
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
@@ -20,5 +22,4 @@ export class Follow {
   public following: Types.ObjectId;
 }
 
-//Change as FollowSchema
 export const FollowSchema = SchemaFactory.createForClass<Follow>(Follow);
