@@ -32,7 +32,7 @@ export class AuthController {
   @Post('login')
   @Message('Sucessfully logged in!')
   public async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+    return this.authService.login();
   }
 
   @Get('logout')

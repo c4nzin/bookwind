@@ -1,14 +1,8 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  Req,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Req } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { UserDocument } from '../user/entities/user.schema';
 import { UserRepository } from '../user/repositories';
-import { RegisterUserDto, LoginDto } from './dto';
-import { LoginReturn, LogoutResponse } from './types/base.types';
+import { RegisterUserDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -42,26 +36,12 @@ export class AuthService {
     return user;
   }
 
-  //hard coded - need refactor
-  public async login(loginDto: LoginDto): Promise<LoginReturn> {
-    return {
-      message: {
-        title: 'Succesfully logged in',
-        body: loginDto,
-      },
-      statusCode: HttpStatus.OK,
-    };
-  }
+  public async login(): Promise<void> {}
 
-  public async logout(@Req() req: ExpressRequest): Promise<LogoutResponse> {
-    const { statusCode } = req.body;
-    return new Promise<LogoutResponse>((resolve, reject) => {
+  public async logout(@Req() req: ExpressRequest): Promise<void> {
+    return new Promise((resolve, reject) => {
       req.logOut((err) => {
-        if (err) reject(err);
-        resolve({
-          message: 'logged out',
-          statusCode,
-        });
+        err ? reject(err) : resolve();
       });
     });
   }
