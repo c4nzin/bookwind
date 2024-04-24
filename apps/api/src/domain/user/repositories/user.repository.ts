@@ -35,21 +35,26 @@ export class UserRepository extends BaseRepository<User> {
 
   //do not forget to delete that method this is just awful to use in practice
   //TODO : just use it like : user.findOne().orFail()
-  //This will save me by implementing one more if checking i.e. : line 35-40 is not useful to check
-  public async findUserOrThrow(_id: string): Promise<UserDocument> {
-    const user = await this.userRepository.findOne({ _id });
+  //This will save me by implementing one more if checking i.e. : line 42-47 is not useful to check
+  // public async findUserOrThrow(_id: string): Promise<UserDocument> {
+  //   const user = await this.userRepository.findOne({ _id });
 
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
+  //   if (!user) {
+  //     throw new BadRequestException('User not found');
+  //   }
 
-    return user;
+  //   return user;
+  // }
+
+  public async findUserOrThrow(id: string): Promise<UserDocument> {
+    return this.findById(id).orFail();
   }
 
   public async findAll() {
     return await this.find({});
   }
 
+  //REFACTOR THIS
   public async findByUsername(
     username: string,
   ): Promise<UserDocument[] | null> {
