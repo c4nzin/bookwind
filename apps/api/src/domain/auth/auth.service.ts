@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, Req } from '@nestjs/common';
-import { Request as ExpressRequest } from 'express';
+import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
+import { Request as ExpressRequest, Response } from 'express';
 import { UserDocument } from '../user/entities/user.schema';
 import { UserRepository } from '../user/repositories';
 import { RegisterUserDto } from './dto';
@@ -25,7 +25,7 @@ export class AuthService {
     console.log(username);
     const user = await this.userRepository.findOne({ username });
 
-    const isCorrectPasswords = await this.userRepository.comparePasswords(
+    const isCorrectPasswords = await this.userRepository.validatePassword(
       password,
       user.password,
     );
@@ -40,7 +40,7 @@ export class AuthService {
 
   public async logout(@Req() req: ExpressRequest): Promise<void> {
     return new Promise((resolve, reject) => {
-      req.logOut((err) => {
+      req.logOut({ keepSessionInfo: false }, (err) => {
         err ? reject(err) : resolve();
       });
     });

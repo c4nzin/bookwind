@@ -25,6 +25,7 @@ export class User {
   })
   public username: string;
 
+  // give username not turkish alphabet only utf-8
   @Prop({
     required: true,
     type: String,

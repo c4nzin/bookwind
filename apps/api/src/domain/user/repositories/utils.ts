@@ -1,4 +1,4 @@
-import { PATHS } from './user.repository';
+import { FollowerRoutes } from './user.repository';
 /* prettier-ignore */
 
 /**
@@ -6,9 +6,9 @@ import { PATHS } from './user.repository';
  * @param url The URL to be wrapped.
  * @returns Wrapped URL based on conditions.
  */
-export function urlWrapper(url: string): string {
-  const followersIndex = url.indexOf(PATHS.FOLLOWERS);
-  return url.includes(PATHS.FOLLOWERS) ? url.slice(followersIndex) : PATHS.FOLLOWINGS;
+export function extractPathFromUrl(url: string, targetPath: string): string {
+  const pathIndex = url.indexOf(targetPath);
+  return pathIndex !== -1 ? url.slice(pathIndex) : "";
 }
 
 // export function urlWrapper(url: string): string {

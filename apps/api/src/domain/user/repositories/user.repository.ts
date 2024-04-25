@@ -5,9 +5,9 @@ import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 import { Request } from 'express';
-import { urlWrapper } from './utils';
+import { extractPathFromUrl } from './utils';
 
-export enum PATHS {
+export enum FollowerRoutes {
   FOLLOWINGS = 'followings',
   FOLLOWERS = 'followers',
 }
@@ -20,7 +20,7 @@ export class UserRepository extends BaseRepository<User> {
     super(userRepository);
   }
 
-  public async comparePasswords(
+  public async validatePassword(
     plainPassword: string,
     hashedPassword: string,
   ): Promise<boolean> {
@@ -33,53 +33,32 @@ export class UserRepository extends BaseRepository<User> {
 
   public async verifyEmail() {}
 
-  //do not forget to delete that method this is just awful to use in practice
-  //TODO : just use it like : user.findOne().orFail()
-  //This will save me by implementing one more if checking i.e. : line 42-47 is not useful to check
-  // public async findUserOrThrow(_id: string): Promise<UserDocument> {
-  //   const user = await this.userRepository.findOne({ _id });
+  public async findUserOrThrow(_id: string): Promise<UserDocument> {
+    const user = await this.userRepository.findOne({ _id });
 
-  //   if (!user) {
-  //     throw new BadRequestException('User not found');
-  //   }
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
 
-  //   return user;
-  // }
-
-  public async findUserOrThrow(id: string): Promise<UserDocument> {
-    return this.findById(id).orFail();
+    return user;
   }
 
   public async findAll() {
-    return await this.find({});
+    return this.find({});
   }
 
-  //REFACTOR THIS
-  public async findByUsername(
-    username: string,
-  ): Promise<UserDocument[] | null> {
-    //Remove _id field i don't want to leak it
-    const queryFields = [
-      'username',
-      'fullname',
-      'posts',
-      'follower',
-      'following',
-      'createdAt',
-    ];
-
-    return this.find({ username }).select(queryFields);
+  public async findByUsername(username: string): Promise<UserDocument> {
+    return this.findOne({ username });
   }
 
   //Follow user
-  //TODO : move "follow" method to user service
-  //TODO : this isn't right to store in user repository imo
+  //TODO : move "follow" method to follow service
+  //TODO : this isn't right to store in follow service
   public async follow(loggedUserId: string, targetId: string): Promise<void> {
     if (loggedUserId === targetId) {
       throw new BadRequestException('You can not follow yourself');
     }
 
-    //is already following or not
     const isAlreadyFollowing = await this.controlIfFollowingOrNot(
       loggedUserId,
       targetId,
@@ -172,13 +151,15 @@ export class UserRepository extends BaseRepository<User> {
   public async getFollowingsOrFollowers(id: string, request: Request) {
     const url = request.url;
     const path: string =
-      urlWrapper(url) === PATHS.FOLLOWINGS ? PATHS.FOLLOWINGS : PATHS.FOLLOWERS;
+      extractPathFromUrl(url) === FollowerRoutes.FOLLOWINGS
+        ? FollowerRoutes.FOLLOWINGS
+        : FollowerRoutes.FOLLOWERS;
 
-    const user = await this.userRepository.findById(id).orFail();
+    const user = await this.userRepository.findById(id);
 
     let userIds: Types.ObjectId[] = [];
 
-    if (path === PATHS.FOLLOWERS) {
+    if (path === FollowerRoutes.FOLLOWERS) {
       userIds = user.follower;
     } else {
       userIds = user.following;
