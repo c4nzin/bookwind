@@ -5,7 +5,7 @@ import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 import { Request } from 'express';
-import { extractPathFromUrl } from './utils';
+import { urlWrapper } from './utils';
 
 export enum FollowerRoutes {
   FOLLOWINGS = 'followings',
@@ -151,7 +151,7 @@ export class UserRepository extends BaseRepository<User> {
   public async getFollowingsOrFollowers(id: string, request: Request) {
     const url = request.url;
     const path: string =
-      extractPathFromUrl(url) === FollowerRoutes.FOLLOWINGS
+      urlWrapper(url) === FollowerRoutes.FOLLOWINGS
         ? FollowerRoutes.FOLLOWINGS
         : FollowerRoutes.FOLLOWERS;
 

@@ -6,9 +6,9 @@ import { FollowerRoutes } from './user.repository';
  * @param url The URL to be wrapped.
  * @returns Wrapped URL based on conditions.
  */
-export function extractPathFromUrl(url: string, targetPath: string): string {
-  const pathIndex = url.indexOf(targetPath);
-  return pathIndex !== -1 ? url.slice(pathIndex) : "";
+export function urlWrapper(url: string): string {
+  const followersIndex = url.indexOf(FollowerRoutes.FOLLOWERS);
+  return url.includes(FollowerRoutes.FOLLOWERS) ? url.slice(followersIndex) : FollowerRoutes.FOLLOWINGS;
 }
 
 // export function urlWrapper(url: string): string {
