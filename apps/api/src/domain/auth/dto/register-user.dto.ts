@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { isFieldTaken } from 'src/core/decorators';
+import { IsEmail, IsNotEmpty, IsString, Validate } from 'class-validator';
+import { isFieldUnique } from '../../../core/decorators';
 
 export class RegisterUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @isFieldTaken('username')
+  @isFieldUnique('username')
   public username: string;
 
   @ApiProperty()

@@ -10,6 +10,7 @@ import { UserModule } from 'src/domain/user/user.module';
 import { MailModule } from './mail/mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { JwtModule } from './jwt/jwt.module';
+import { IsFieldUniqueConstraint } from 'src/core/decorators';
 @Module({
   imports: [
     EnvalidModule.forRoot({ validators, isGlobal: true, useDotenv: true }),
@@ -18,7 +19,7 @@ import { JwtModule } from './jwt/jwt.module';
     AuthModule,
     UserModule,
     MailModule,
-    EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot({ global: true }),
     JwtModule,
   ],
   providers: [
@@ -26,6 +27,7 @@ import { JwtModule } from './jwt/jwt.module';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
+    IsFieldUniqueConstraint,
   ],
 })
 export class AppModule {}
