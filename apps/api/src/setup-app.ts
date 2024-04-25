@@ -5,7 +5,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './core/interceptors/transform.interceptor';
-import { NestContainer, Reflector } from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 import { HttpExceptionFilter } from './core/exceptions/http-exception.filter';
 import session from 'express-session';
 import passport from 'passport';

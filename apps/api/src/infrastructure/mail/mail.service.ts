@@ -29,7 +29,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: email,
       subject,
-      template: '/templates/welcome', //not implemented yet
+      template: __dirname + '/templates/welcome', //not implemented yet
       context: {
         fullname,
       },

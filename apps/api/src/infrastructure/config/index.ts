@@ -1,4 +1,4 @@
-import { port, str } from 'envalid';
+import { port, str, num } from 'envalid';
 import { makeValidators, Static } from 'nestjs-envalid';
 
 const config = {
@@ -13,6 +13,8 @@ const config = {
   GOOGLE_CLIENT_SECRET: str(),
   MAIL_HOST: str(),
   MAIL_PORT: port(),
+  TTL: num({ default: 10000 }),
+  LIMIT: num({ default: 20 }),
 };
 
 export const validators = makeValidators(config);
