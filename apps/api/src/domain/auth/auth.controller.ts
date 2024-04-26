@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDocument } from '../user/entities/user.schema';
 import { RegisterUserDto, LoginDto } from './dto';
