@@ -1,7 +1,6 @@
-//not using rn
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { UserDocument } from 'src/domain/user/entities';
 
 export type FollowDocument = HydratedDocument<Follow>;
 

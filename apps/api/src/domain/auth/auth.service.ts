@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
-import { Request as ExpressRequest, Response } from 'express';
+import { BadRequestException, Injectable, Req } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { UserDocument } from '../user/entities/user.schema';
 import { UserRepository } from '../user/repositories';
 import { RegisterUserDto } from './dto';
@@ -18,20 +18,13 @@ export class AuthService {
     return this.userRepository.create(registerUserDto);
   }
 
-  public async validate(
-    username: string,
-    password: string,
-  ): Promise<UserDocument | null> {
+  public async validate(username: string, password: string): Promise<UserDocument | null> {
     console.log(username);
     const user = await this.userRepository.findOne({ username });
 
-    const isCorrectPasswords = await this.userRepository.validatePassword(
-      password,
-      user.password,
-    );
+    const isCorrectPasswords = await this.userRepository.validatePassword(password, user.password);
 
-    if (!isCorrectPasswords) return null;
-    if (!user) return null;
+    if (!isCorrectPasswords || !user) return null;
 
     return user;
   }

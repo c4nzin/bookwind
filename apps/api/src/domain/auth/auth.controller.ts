@@ -18,9 +18,7 @@ export class AuthController {
 
   @Post('register')
   @Message('Sucessfully registered!')
-  public async register(
-    @Body() registerUserDto: RegisterUserDto,
-  ): Promise<UserDocument> {
+  public async register(@Body() registerUserDto: RegisterUserDto): Promise<UserDocument> {
     this.eventEmitter.emit('user-registered', {
       username: registerUserDto.username,
     });

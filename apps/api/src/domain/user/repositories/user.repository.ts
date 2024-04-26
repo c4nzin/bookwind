@@ -20,10 +20,7 @@ export class UserRepository extends BaseRepository<User> {
     super(userRepository);
   }
 
-  public async validatePassword(
-    plainPassword: string,
-    hashedPassword: string,
-  ): Promise<boolean> {
+  public async validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
     const isPasswordMatch = await bcrypt.compare(plainPassword, hashedPassword);
 
     if (!isPasswordMatch) throw new BadRequestException('Invalid Password!');
@@ -51,12 +48,11 @@ export class UserRepository extends BaseRepository<User> {
     return this.findOne({ username });
   }
 
+  //move them to follow repository
   public async getFollowingsOrFollowers(id: string, request: Request) {
     const url = request.url;
     const path: string =
-      extractPathFromUrl(url) === FollowerRoutes.FOLLOWINGS
-        ? FollowerRoutes.FOLLOWINGS
-        : FollowerRoutes.FOLLOWERS;
+      extractPathFromUrl(url) === FollowerRoutes.FOLLOWINGS ? FollowerRoutes.FOLLOWINGS : FollowerRoutes.FOLLOWERS;
 
     const user = await this.userRepository.findById(id);
 
@@ -68,9 +64,7 @@ export class UserRepository extends BaseRepository<User> {
       userIds = user.following;
     }
 
-    const users = await Promise.all(
-      userIds.map((userId) => this.userRepository.findById(userId)),
-    );
+    const users = await Promise.all(userIds.map((userId) => this.userRepository.findById(userId)));
 
     return users.map((user) => user.username);
   }
