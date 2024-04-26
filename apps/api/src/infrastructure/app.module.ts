@@ -12,6 +12,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { JwtModule } from './jwt/jwt.module';
 import { IsFieldUniqueConstraint } from 'src/core/decorators';
 import { ThrottlerModule } from '../infrastructure/throttler';
+import { FollowModule } from 'src/domain/follow/follow.module';
 @Module({
   imports: [
     EnvalidModule.forRoot({ validators, isGlobal: true, useDotenv: true }),
@@ -19,6 +20,7 @@ import { ThrottlerModule } from '../infrastructure/throttler';
     DatabaseModule,
     AuthModule,
     UserModule,
+    FollowModule,
     MailModule,
     EventEmitterModule.forRoot({ global: true }),
     JwtModule,
