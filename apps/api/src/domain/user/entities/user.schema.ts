@@ -22,6 +22,7 @@ export class User {
     unique: true,
     type: String,
     trim: true,
+    match: [/^[a-zA-Z0-9]+$/, 'Please enter a valid username'],
   })
   public username: string;
 
