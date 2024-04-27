@@ -81,5 +81,24 @@ export class FollowRepository extends BaseRepository<Follow> {
     return { results, totalFollowings };
   }
 
+  public async getFollowers(userId: string, skipToDoc = 0, limitToDoc?: number) {
+    const user = await this.userRepository.findById(userId).select('follower');
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const queryWithPaginate = await this.userRepository
+      .find({ _id: { $in: user.follower } })
+      .select('-password -mail')
+      .skip(skipToDoc)
+      .limit(limitToDoc);
+
+    const totalFollowers = user.follower.length;
+    const results = queryWithPaginate;
+
+    return { results, totalFollowers };
+  }
+
   public async mergeTwoDocuments(documentOne: FollowDocument, documentTwo: UserDocument) {} //not using rn
 }
