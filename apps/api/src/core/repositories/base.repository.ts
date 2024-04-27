@@ -1,9 +1,4 @@
-import {
-  FilterQuery,
-  Model,
-  UpdateQuery,
-  UpdateWithAggregationPipeline,
-} from 'mongoose';
+import { FilterQuery, Model, UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 import {
   CreateResult,
   DeleteResult,
@@ -32,10 +27,7 @@ export class BaseRepository<T> {
     return this.model.findByIdAndDelete(id);
   }
 
-  public findByIdAndUpdate(
-    id: string,
-    update: UpdateWithAggregationPipeline | UpdateQuery<T>,
-  ): FindResult<T> {
+  public findByIdAndUpdate(id: string, update: UpdateWithAggregationPipeline | UpdateQuery<T>): FindResult<T> {
     return this.model.findByIdAndUpdate(id, update, { new: true });
   }
 
@@ -55,17 +47,11 @@ export class BaseRepository<T> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
 
-  public updateMany(
-    filter: FilterQuery<T>,
-    object: UpdateWithAggregationPipeline | UpdateQuery<T>,
-  ): UpdateResult<T> {
+  public updateMany(filter: FilterQuery<T>, object: UpdateWithAggregationPipeline | UpdateQuery<T>): UpdateResult<T> {
     return this.model.updateMany(filter, object, { new: true });
   }
 
-  public updateOne(
-    query: FilterQuery<T>,
-    object: UpdateWithAggregationPipeline | UpdateQuery<T>,
-  ): UpdateResult<T> {
+  public updateOne(query: FilterQuery<T>, object: UpdateWithAggregationPipeline | UpdateQuery<T>): UpdateResult<T> {
     return this.model.updateOne(query, object);
   }
 
