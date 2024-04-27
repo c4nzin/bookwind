@@ -48,32 +48,7 @@ export class UserRepository extends BaseRepository<User> {
     return this.findOne({ username });
   }
 
-  //move them to follow repository
-  public async getFollowingsOrFollowers(id: string, request: Request) {
-    const url = request.url;
-    const path: string =
-      extractPathFromUrl(url) === FollowerRoutes.FOLLOWINGS ? FollowerRoutes.FOLLOWINGS : FollowerRoutes.FOLLOWERS;
-
-    const user = await this.userRepository.findById(id);
-
-    let userIds: Types.ObjectId[] = [];
-
-    if (path === FollowerRoutes.FOLLOWERS) {
-      userIds = user.follower;
-    } else {
-      userIds = user.following;
-    }
-
-    const users = await Promise.all(userIds.map((userId) => this.userRepository.findById(userId)));
-
-    return users.map((user) => user.username);
-  }
-
-  public async getFollowers(id: string, request: Request) {
-    return this.getFollowingsOrFollowers(id, request);
-  }
-
-  public async getFollowings(id: string, request: Request) {
-    return this.getFollowingsOrFollowers(id, request);
+  public async count() {
+    return this.userRepository.countDocuments();
   }
 }

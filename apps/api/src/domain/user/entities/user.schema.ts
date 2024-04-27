@@ -25,7 +25,6 @@ export class User {
   })
   public username: string;
 
-  // give username not turkish alphabet only utf-8
   @Prop({
     required: true,
     type: String,
@@ -93,6 +92,7 @@ export class User {
   })
   public posts: Types.ObjectId[];
 
+  //not tested yet
   @Prop({
     ref: 'Follow',
     default: [],
@@ -100,6 +100,7 @@ export class User {
   })
   public follower: Types.ObjectId[];
 
+  //not tested yet
   @Prop({
     ref: 'Follow',
     default: [],
