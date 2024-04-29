@@ -20,6 +20,10 @@ export class FollowRepository extends BaseRepository<Follow> {
     const targetUser = await this.userRepository.findById(targetUserId).select('-password -mail');
     const loggedUser = await this.userRepository.findById(loggedUserId).select('-password -mail');
 
+    if (!targetUser || !loggedUser) {
+      throw new BadRequestException('User not found');
+    }
+
     if (loggedUserId === targetUserId) {
       throw new BadRequestException('You cannot follow yourself');
     }
@@ -40,6 +44,10 @@ export class FollowRepository extends BaseRepository<Follow> {
   public async unfollow(loggedUserId: string, targetUserId: string): Promise<void> {
     const targetUser = await this.userRepository.findById(targetUserId).select('-password -mail');
     const loggedUser = await this.userRepository.findById(loggedUserId).select('-password -mail');
+
+    if (!targetUser || !loggedUser) {
+      throw new BadRequestException('User not found');
+    }
 
     if (loggedUser.id === targetUserId) {
       throw new BadRequestException('Cannot unfollow yourself');
