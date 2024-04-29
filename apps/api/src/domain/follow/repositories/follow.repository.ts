@@ -4,7 +4,7 @@ import { Follow, FollowDocument } from '../entities/follow.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserRepository } from 'src/domain/user/repositories';
-import { UserDocument } from 'src/domain/user/entities';
+import { User, UserDocument } from 'src/domain/user/entities';
 
 @Injectable()
 export class FollowRepository extends BaseRepository<Follow> {
@@ -75,15 +75,19 @@ export class FollowRepository extends BaseRepository<Follow> {
     return !!user;
   }
 
-  //add return type
-  public async getFollowings(userId: string, docToSkip = 0, limitToDoc?: number) {
+  //{ results: UserDocument[]; totalFollowers: number } this code not looking well, try to think and come up with a better code??
+  public async getFollowings(
+    userId: string,
+    docToSkip = 0,
+    limitToDoc?: number,
+  ): Promise<{ results: UserDocument[]; totalFollowings: number }> {
     const user = await this.userRepository.findById(userId).select('following');
 
     if (!user) {
       throw new BadRequestException('User not found!');
     }
 
-    const queryWithPaginate = await this.userRepository
+    const queryWithPaginate: UserDocument[] = await this.userRepository
       .find({ _id: { $in: user.following } })
       .select('-password -mail')
       .skip(docToSkip)
@@ -95,14 +99,19 @@ export class FollowRepository extends BaseRepository<Follow> {
     return { results, totalFollowings };
   }
 
-  public async getFollowers(userId: string, skipToDoc = 0, limitToDoc?: number) {
+  //{ results: UserDocument[]; totalFollowers: number } this code not looking well, try to think and come up with a better code??
+  public async getFollowers(
+    userId: string,
+    skipToDoc = 0,
+    limitToDoc?: number,
+  ): Promise<{ results: UserDocument[]; totalFollowers: number }> {
     const user = await this.userRepository.findById(userId).select('follower');
 
     if (!user) {
       throw new BadRequestException('User not found');
     }
 
-    const queryWithPaginate = await this.userRepository
+    const queryWithPaginate: UserDocument[] = await this.userRepository
       .find({ _id: { $in: user.follower } })
       .select('-password -mail')
       .skip(skipToDoc)
