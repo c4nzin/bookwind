@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  ThrottlerGuard,
-  ThrottlerModule as ThrottlerModuleHost,
-} from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule as ThrottlerModuleHost } from '@nestjs/throttler';
 import { ThrottlerService } from './throttler.service';
 import { APP_GUARD } from '@nestjs/core';
 

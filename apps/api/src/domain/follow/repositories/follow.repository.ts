@@ -16,12 +16,15 @@ export class FollowRepository extends BaseRepository<Follow> {
     super(followRepository);
   }
 
-  public async follow(loggedUser: UserDocument, targetUserId: string): Promise<void> {
-    if (loggedUser.id === targetUserId) {
+  public async follow(loggedUserId: string, targetUserId: string): Promise<void> {
+    const targetUser = await this.userRepository.findById(targetUserId).select('-password -mail');
+    const loggedUser = await this.userRepository.findById(loggedUserId).select('-password -mail');
+
+    if (loggedUserId === targetUserId) {
       throw new BadRequestException('You cannot follow yourself');
     }
 
-    const isFollowing = await this.isFollowing(loggedUser.id, targetUserId);
+    const isFollowing = await this.isFollowing(loggedUserId, targetUserId);
 
     await this.ensureUserExists(targetUserId);
 
@@ -29,12 +32,15 @@ export class FollowRepository extends BaseRepository<Follow> {
       throw new BadRequestException('You already following current user');
     }
 
-    await this.userRepository.updateOne({ _id: loggedUser.id }, { $push: { following: targetUserId } });
+    await this.userRepository.updateOne({ _id: loggedUserId }, { $push: { following: targetUser } });
 
-    await this.userRepository.updateOne({ _id: targetUserId }, { $push: { follower: loggedUser.id } });
+    await this.userRepository.updateOne({ _id: targetUserId }, { $push: { follower: loggedUser } });
   }
 
-  public async unfollow(loggedUser: UserDocument, targetUserId: string): Promise<void> {
+  public async unfollow(loggedUserId: string, targetUserId: string): Promise<void> {
+    const targetUser = await this.userRepository.findById(targetUserId).select('-password -mail');
+    const loggedUser = await this.userRepository.findById(loggedUserId).select('-password -mail');
+
     if (loggedUser.id === targetUserId) {
       throw new BadRequestException('Cannot unfollow yourself');
     }
@@ -47,9 +53,9 @@ export class FollowRepository extends BaseRepository<Follow> {
 
     await this.ensureUserExists(targetUserId);
 
-    await this.userRepository.updateOne({ _id: loggedUser.id }, { $pull: { following: targetUserId } });
+    await this.userRepository.updateOne({ _id: loggedUser.id }, { $pull: { following: targetUser } });
 
-    await this.userRepository.updateOne({ _id: targetUserId }, { $pull: { follower: loggedUser.id } });
+    await this.userRepository.updateOne({ _id: targetUserId }, { $pull: { follower: loggedUser } });
   }
 
   private async ensureUserExists(userId: string): Promise<UserDocument> {

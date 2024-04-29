@@ -16,13 +16,13 @@ export class FollowController {
   @Post(':id/follow')
   @Message('Sucessfully followed the user')
   public async followUser(@Param('id') id: string, @User() user: UserDocument): Promise<void> {
-    return this.followRepository.follow(user, id);
+    this.followRepository.follow(user.id, id);
   }
 
   @Post(':id/unfollow')
   @Message('You successfuly unfollowed the user!')
   public async unfollowUser(@User() user: UserDocument, @Param('id') id: string): Promise<void> {
-    return this.followRepository.unfollow(user, id);
+    return this.followRepository.unfollow(user.id, id);
   }
 
   //Bad code and doing nothing!!!!!!
