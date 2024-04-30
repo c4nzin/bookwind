@@ -3,6 +3,13 @@ import { HydratedDocument, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 export type UserDocument = HydratedDocument<User>;
+export type OtpDocument = HydratedDocument<Otp>;
+
+export enum UseCase {
+  LOGIN = 'LOGIN',
+  D2FA = 'D2FA',
+  PHV = 'PHV',
+}
 
 enum Roles {
   user = 'User',
@@ -46,6 +53,12 @@ export class User {
   public isEmailVerified: string;
 
   @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public isPhoneVerified: string;
+
+  @Prop({
     required: true,
   })
   public password: string;
@@ -62,7 +75,7 @@ export class User {
     match: [/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, 'Please enter your phone number'],
     required: false, // its false because i am not planning to implement sms validation feature in 1.0 version
   })
-  public phoneNumber: number;
+  public phoneNumber: string;
 
   @Prop({
     type: String,
@@ -108,9 +121,41 @@ export class User {
     type: [{ type: Types.ObjectId, ref: 'Follow' }],
   })
   public following: Types.ObjectId[];
+
+  @Prop({ type: Boolean, default: false })
+  public twoFactorAuthentication: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+//Do not forget to seperate otp schema with user.
+//TODO : make a another file and put them into otp.schema.ts file!
+//idea : maybe you can even create a another folder into domain like "otp" and the otp folder may contain whole structure like controller entities repositories services and lastly module?? not sure tho
+@Schema({
+  timestamps: true,
+})
+export class Otp {
+  @Prop({
+    ref: 'User',
+    type: Types.ObjectId,
+  })
+  public owner: Types.ObjectId;
+
+  @Prop({
+    type: String,
+  })
+  public code: string;
+
+  @Prop({
+    type: Date,
+    expires: 0,
+  })
+  public expiresAt: Date;
+
+  @Prop({ enum: UseCase })
+  public useCase: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass<User>(User);
+export const OtpSchema = SchemaFactory.createForClass<Otp>(Otp);
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified(this.password)) {

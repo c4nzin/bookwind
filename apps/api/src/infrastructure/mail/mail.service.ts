@@ -19,9 +19,7 @@ export class MailService {
   ) {}
 
   @OnEvent(USER_REGISTERED)
-  public async registeredUser(
-    data: UserPayload['user-registered'],
-  ): Promise<void> {
+  public async registeredUser(data: UserPayload['user-registered']): Promise<void> {
     const { email, fullname } = data;
 
     const subject = `Welcome to our social book app, ${fullname}`;
@@ -57,10 +55,7 @@ export class MailService {
     return `http://localhost:${this.config.PORT}/${this.config.GLOBAL_PREFIX}/auth/authorize?token=${token}`;
   }
 
-  private async sendVerificationEmail(
-    email: string,
-    verificationEmailUrl: string,
-  ): Promise<void> {
+  private async sendVerificationEmail(email: string, verificationEmailUrl: string): Promise<void> {
     await this.mailerService.sendMail({
       to: email,
       subject: 'Please verify your email',

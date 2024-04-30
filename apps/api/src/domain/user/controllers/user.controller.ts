@@ -16,9 +16,7 @@ export class UserController {
 
   @Get(':username')
   @Message('Sucessfully fetched the user!')
-  public async getByUsername(
-    @Param('username') username: string,
-  ): Promise<UserDocument | null> {
+  public async getByUsername(@Param('username') username: string): Promise<UserDocument | null> {
     return this.userRepository.findByUsername(username);
   }
 }

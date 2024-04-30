@@ -15,6 +15,10 @@ const config = {
   MAIL_PORT: port(),
   TTL: num({ default: 10000 }),
   LIMIT: num({ default: 20 }),
+  TWILIO_AUTH_SID: str(),
+  TWILIO_AUTH_TOKEN: str(),
+  TWILIO_PHONE_NUMBER: str(),
+  JWT_SECRET: str(),
 };
 
 export const validators = makeValidators(config);

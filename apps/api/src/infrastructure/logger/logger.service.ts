@@ -1,8 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  WinstonModuleOptions,
-  WinstonModuleOptionsFactory,
-} from 'nest-winston';
+import { WinstonModuleOptions, WinstonModuleOptionsFactory } from 'nest-winston';
 import { Logtail } from '@logtail/node';
 import * as winston from 'winston';
 import { createWinstonFormatter } from './winston-formatter';
@@ -14,9 +11,7 @@ export class LoggerService implements WinstonModuleOptionsFactory {
 
   public async createWinstonModuleOptions(): Promise<WinstonModuleOptions> {
     const logtail = new Logtail(this.configuration.LOGTAIL_SOURCE);
-    const logtailTransports: winston.transport[] = [
-      new LogtailTransport(logtail),
-    ];
+    const logtailTransports: winston.transport[] = [new LogtailTransport(logtail)];
 
     if (this.configuration.isDevelopment) {
       logtailTransports.push(new winston.transports.Console());
