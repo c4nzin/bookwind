@@ -1,7 +1,7 @@
 import { BaseRepository } from 'src/core/repositories';
 import { User, UserDocument } from '../entities/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 

@@ -31,7 +31,7 @@ export class AuthController {
   //TODO : make some changes in TwilioDto because it has some bad logic
   //maybe use @User decorator to access logged user
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('phone/verify')
   @HttpCode(200)
   public verifyPhone(@Req() request: Request, @Body() twilioDto?: TwilioDto) {
@@ -39,7 +39,7 @@ export class AuthController {
   }
 
   //maybe use @User decorator to access logged user
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('phone/verify/token')
   public async validatePhoneVerification() {
     //implement verification method in service

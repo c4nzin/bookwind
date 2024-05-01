@@ -19,6 +19,7 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
     const res =
       exception instanceof HttpException ? exception.getResponse() : new InternalServerErrorException().getResponse();
 
+    console.log(res.toString());
     response.status(status).json(res);
   }
 }

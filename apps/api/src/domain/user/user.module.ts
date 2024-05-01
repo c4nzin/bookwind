@@ -6,15 +6,15 @@ import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { JwtService } from '@modules/jwt';
 
+export const mongooseModuleFactories = MongooseModule.forFeature([
+  { name: User.name, schema: UserSchema },
+  { name: Otp.name, schema: OtpSchema },
+]);
+
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: Otp.name, schema: OtpSchema },
-    ]),
-  ],
+  imports: [mongooseModuleFactories],
   controllers: [UserController],
   providers: [UserRepository, UserService, JwtService],
-  exports: [UserRepository],
+  exports: [UserRepository, mongooseModuleFactories],
 })
 export class UserModule {}
