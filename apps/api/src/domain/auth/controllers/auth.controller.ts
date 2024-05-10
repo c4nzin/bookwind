@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { Body, Controller, Get, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
-import { UserDocument } from '../user/entities/user.schema';
-import { RegisterUserDto, LoginDto } from './dto';
+import { UserDocument } from '../../user/entities/user.schema';
+import { RegisterUserDto, LoginDto } from '../dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Message } from 'src/core/decorators/message.decorator';
 
@@ -17,6 +17,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @HttpCode(200)
   @Message('Sucessfully registered!')
   public async register(@Body() registerUserDto: RegisterUserDto): Promise<UserDocument> {
     this.eventEmitter.emit('user-registered', {
@@ -26,11 +27,14 @@ export class AuthController {
     return this.authService.register(registerUserDto);
   }
 
+  //maybe use @User decorator to access logged user
+
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @HttpCode(200)
   @Message('Sucessfully logged in!')
   public async login(@Body() loginDto: LoginDto) {
-    return this.authService.login();
+    return this.authService.login(loginDto);
   }
 
   @Get('logout')

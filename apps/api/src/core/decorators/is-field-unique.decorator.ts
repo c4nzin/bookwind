@@ -15,10 +15,7 @@ export class IsFieldUniqueConstraint implements ValidatorConstraintInterface {
     console.log(this.userRepository);
   }
 
-  public async validate(
-    value: string,
-    validationArguments?: ValidationArguments,
-  ): Promise<boolean> {
+  public async validate(value: string, validationArguments?: ValidationArguments): Promise<boolean> {
     console.log(validationArguments.property);
     console.log(value, 'value');
     const existingUser = this.userRepository.findOne({
@@ -32,10 +29,7 @@ export class IsFieldUniqueConstraint implements ValidatorConstraintInterface {
   }
 }
 
-export function isFieldUnique(
-  property: string,
-  validationOptions?: ValidationOptions,
-) {
+export function isFieldUnique(property: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'isFieldUnique',

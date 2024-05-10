@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, Req } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
-import { UserDocument } from '../user/entities/user.schema';
-import { UserRepository } from '../user/repositories';
-import { RegisterUserDto } from './dto';
+import { UserDocument } from '../../user/entities/user.schema';
+import { UserRepository } from '../../user/repositories';
+import { RegisterUserDto } from '../dto';
 
 @Injectable()
 export class AuthService {
@@ -19,12 +19,13 @@ export class AuthService {
   }
 
   public async validate(username: string, password: string): Promise<UserDocument | null> {
-    console.log(username);
     const user = await this.userRepository.findOne({ username });
 
     const isCorrectPasswords = await this.userRepository.validatePassword(password, user.password);
 
     if (!isCorrectPasswords || !user) return null;
+
+    //add 2fa here
 
     return user;
   }

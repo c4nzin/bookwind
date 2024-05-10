@@ -46,6 +46,12 @@ export class User {
   public isEmailVerified: string;
 
   @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public isPhoneVerified: string;
+
+  @Prop({
     required: true,
   })
   public password: string;
@@ -62,7 +68,7 @@ export class User {
     match: [/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, 'Please enter your phone number'],
     required: false, // its false because i am not planning to implement sms validation feature in 1.0 version
   })
-  public phoneNumber: number;
+  public phoneNumber: string;
 
   @Prop({
     type: String,
@@ -108,9 +114,13 @@ export class User {
     type: [{ type: Types.ObjectId, ref: 'Follow' }],
   })
   public following: Types.ObjectId[];
+
+  @Prop({ type: Boolean, default: false })
+  public twoFactorAuthentication: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+//Do not forget to seperate otp schema with user.
+export const UserSchema = SchemaFactory.createForClass<User>(User);
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified(this.password)) {

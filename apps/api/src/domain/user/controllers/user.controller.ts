@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { UserRepository } from '../repositories';
 import { User } from 'src/core/decorators/user.decorator';
 import { UserDocument } from '../entities/user.schema';
@@ -16,9 +16,7 @@ export class UserController {
 
   @Get(':username')
   @Message('Sucessfully fetched the user!')
-  public async getByUsername(
-    @Param('username') username: string,
-  ): Promise<UserDocument | null> {
+  public async getByUsername(@Param('username') username: string): Promise<UserDocument | null> {
     return this.userRepository.findByUsername(username);
   }
 }
