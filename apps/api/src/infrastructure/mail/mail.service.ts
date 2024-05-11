@@ -44,11 +44,7 @@ export class MailService {
   }
 
   private async generateToken(userId: string): Promise<string> {
-    const token = await this.jwtService.signAsync(
-      { userId },
-      { expiresIn: '2d', secret: this.config.EXPRESS_SESSION_SECRET },
-    );
-    return token;
+    return this.jwtService.signAsync({ userId }, { expiresIn: '2d', secret: this.config.EXPRESS_SESSION_SECRET });
   }
 
   private buildVerificationUrl(token: string): string {
