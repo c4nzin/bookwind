@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { MailerOptions, MailerOptionsFactory } from '@nestjs-modules/mailer';
 import { Config, ENV } from '@modules/config';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { join } from 'path';
 
 @Injectable()
 export class MailConfigService implements MailerOptionsFactory {
@@ -11,6 +12,7 @@ export class MailConfigService implements MailerOptionsFactory {
     return {
       transport: {
         host: this.config.MAIL_HOST,
+        port: this.config.MAIL_PORT,
         from: `"bookwind" <${this.config.GOOGLE_EMAIL}>`,
         secure: false, //for now
         auth: {
@@ -25,7 +27,7 @@ export class MailConfigService implements MailerOptionsFactory {
       },
       template: {
         adapter: new EjsAdapter(),
-        dir: __dirname + '/templates/',
+        dir: join(__dirname + 'templates'),
       },
     } as MailerOptions;
   }

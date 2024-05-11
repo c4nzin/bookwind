@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
+//not used!!!
 export enum FollowerRoutes {
   FOLLOWINGS = 'followings',
   FOLLOWERS = 'followers',

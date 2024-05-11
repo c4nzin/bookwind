@@ -3,10 +3,9 @@ import { UserRepository } from 'src/domain/user/repositories';
 import { FollowRepository } from '../repositories';
 import { Message, User } from 'src/core/decorators';
 import { UserDocument } from 'src/domain/user/entities';
-import { Request } from 'express';
 import { PaginationDto } from '../dto/pagination.dto';
 
-@Controller('follow')
+@Controller('users')
 export class FollowController {
   constructor(
     private readonly userRepository: UserRepository,

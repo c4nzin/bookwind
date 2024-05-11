@@ -22,6 +22,7 @@ export class AuthController {
   public async register(@Body() registerUserDto: RegisterUserDto): Promise<UserDocument> {
     this.eventEmitter.emit('user-registered', {
       username: registerUserDto.username,
+      mail: registerUserDto.mail,
     });
 
     return this.authService.register(registerUserDto);
