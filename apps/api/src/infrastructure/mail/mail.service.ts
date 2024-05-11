@@ -36,14 +36,14 @@ export class MailService {
 
   @OnEvent(USER_REGISTERED)
   public async verificationMail(user: UserDocument): Promise<void> {
-    const token = await this.generateTokenUrl(user.id);
+    const token = await this.generateToken(user.id);
 
     const verificationEmailUrl = this.buildVerificationUrl(token);
 
     await this.sendVerificationEmail(user.mail, verificationEmailUrl);
   }
 
-  private async generateTokenUrl(userId: string): Promise<string> {
+  private async generateToken(userId: string): Promise<string> {
     const token = await this.jwtService.signAsync(
       { userId },
       { expiresIn: '2d', secret: this.config.EXPRESS_SESSION_SECRET },

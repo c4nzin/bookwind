@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, Req } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { UserDocument } from '../../user/entities/user.schema';
 import { UserRepository } from '../../user/repositories';
-import { RegisterUserDto } from '../dto';
+import { LoginDto, RegisterUserDto } from '../dto';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,7 @@ export class AuthService {
     return user;
   }
 
-  public async login(): Promise<void> {}
+  public async login(loginDto: LoginDto): Promise<void> {}
 
   public async logout(@Req() req: ExpressRequest): Promise<void> {
     return new Promise((resolve, reject) => {
